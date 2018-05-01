@@ -1,0 +1,182 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.kobe</groupId>
+  <artifactId>dubbok-parent</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>dubbok-parent</name>
+  <url>http://maven.apache.org</url>
+
+ <modules>
+        <module>/dubbok-client</module>
+        <module>/dubbok-server</module>
+        <module>/dubbok-common</module>
+        <module>/dubbok-registry</module>
+        <module>/dubbok-sample-tax</module>
+        <module>/dubbok-sample-invoice</module>
+  </modules>
+    
+    <!-- 配置发布到私服 -->
+  <distributionManagement>
+		<repository>
+			<id>nexus-releases</id>
+			<name>Nexus Release Repository</name>
+			<url>http://localhost:8081/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>nexus-snapshots</id>
+			<name>Nexus Snapshot Repository</name>
+			<url>http://localhost:8081/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+  </distributionManagement>   
+    
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <version.maven-compiler-plugin>3.2</version.maven-compiler-plugin>
+    <version.maven-surefire-plugin>2.18.1</version.maven-surefire-plugin>
+    <version.maven-source-plugin>2.4</version.maven-source-plugin>
+    <version.commons-lang>3.3.2</version.commons-lang>
+    <version.commons-collections>4.0</version.commons-collections>
+    <junit.version>4.11</junit.version>
+    <version.slf4j>1.7.10</version.slf4j>
+
+    <version.spring>4.1.5.RELEASE</version.spring>
+    <version.netty>4.1.22.Final</version.netty>
+    <!-- serialization/deserialization -->
+    <version.protostuff>1.0.9</version.protostuff>
+    <!-- for object creation -->
+    <version.objenesis>2.1</version.objenesis>
+    <version.cglib>3.1</version.cglib>
+    <version.zookeeper>3.4.5</version.zookeeper>
+    <version.zkclient>0.7</version.zkclient>
+     </properties>
+
+ <dependencyManagement>
+        <dependencies>
+	        <dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
+			</dependency>  
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${version.slf4j}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${version.commons-lang}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${version.commons-collections}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${version.spring}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${version.spring}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${version.netty}</version>
+            </dependency>
+            <!-- Protostuff -->
+            <dependency>
+                <groupId>com.dyuproject.protostuff</groupId>
+                <artifactId>protostuff-core</artifactId>
+                <version>${version.protostuff}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.dyuproject.protostuff</groupId>
+                <artifactId>protostuff-runtime</artifactId>
+                <version>${version.protostuff}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.objenesis</groupId>
+                <artifactId>objenesis</artifactId>
+                <version>${version.objenesis}</version>
+            </dependency>
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>${version.cglib}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>${version.zookeeper}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.101tec</groupId>
+                <artifactId>zkclient</artifactId>
+                <version>${version.zkclient}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <!-- Source -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>${version.maven-source-plugin}</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <build>
+     	<finalName>dubbok-parent</finalName>
+        <plugins>
+            <!-- Compiler -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${version.maven-compiler-plugin}</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <!-- Test -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${version.maven-surefire-plugin}</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
